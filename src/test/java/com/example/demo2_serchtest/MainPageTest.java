@@ -40,7 +40,6 @@ public class MainPageTest {
 
     @Test
     public void search() {
-
         String input = "Selenium";
         WebElement searchField = driver.findElement(By.cssSelector("#sb_form_q"));
         searchField.sendKeys(input);
@@ -48,8 +47,7 @@ public class MainPageTest {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
         wait.until(ExpectedConditions.and(
                 ExpectedConditions.attributeContains(By.cssSelector("h2 > a[href]"), "href", "selenium"),
-                ExpectedConditions.elementToBeClickable(By.cssSelector("h2 > a[href]"))
-        ));
+                ExpectedConditions.elementToBeClickable(By.cssSelector("h2 > a[href]"))));
         List<WebElement> results = driver.findElements(By.cssSelector("h2 > a[href]"));
         clickElement(results, 0);
         ArrayList<String> tabs = new ArrayList<> (driver.getWindowHandles());
@@ -59,8 +57,6 @@ public class MainPageTest {
         String adress = driver.getCurrentUrl();
         Assertions.assertEquals("https://www.selenium.dev/", adress, "Не совпадает");
     }
-
-
     public void clickElement(List<WebElement> results, int num) {
         results.get(num).click();
         System.out.println("Нажал на первый элемент");

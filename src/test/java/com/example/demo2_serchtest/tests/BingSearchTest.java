@@ -1,9 +1,8 @@
-package com.example.demo2_serchtest;
+package com.example.demo2_serchtest.tests;
 
-import com.beust.jcommander.Strings;
+import com.example.demo2_serchtest.pageg.MainPage;
+import com.example.demo2_serchtest.pageg.ResultsPage;
 import org.junit.jupiter.api.*;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -17,7 +16,9 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainPageTest {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+public class BingSearchTest {
     private WebDriver driver;
 
     @BeforeEach
@@ -39,26 +40,34 @@ public class MainPageTest {
     }
 
     @Test
-    public void search() {
+    public void searchResultsTest() {
         String input = "Selenium";
-        WebElement searchField = driver.findElement(By.cssSelector("#sb_form_q"));
-        searchField.sendKeys(input);
-        searchField.submit();
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+        MainPage mp =  new MainPage(driver);
+        mp.sendText(input);
+
+             WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
         wait.until(ExpectedConditions.and(
                 ExpectedConditions.attributeContains(By.cssSelector("h2 > a[href]"), "href", "selenium"),
                 ExpectedConditions.elementToBeClickable(By.cssSelector("h2 > a[href]"))));
-        List<WebElement> results = driver.findElements(By.cssSelector("h2 > a[href]"));
-        clickElement(results, 0);
+        ResultsPage rp = new ResultsPage(driver);
+        rp.clickElement(0);
         ArrayList<String> tabs = new ArrayList<> (driver.getWindowHandles());
         driver.switchTo().window(tabs.get(1));
         WebDriverWait wait2 = new WebDriverWait(driver, Duration.ofSeconds(3));
-        wait.until(ExpectedConditions.not(ExpectedConditions.urlContains("bing.com")));
-        String adress = driver.getCurrentUrl();
-        Assertions.assertEquals("https://www.selenium.dev/", adress, "Не совпадает");
+        wait2.until(ExpectedConditions.not(ExpectedConditions.urlContains("bing.com")));
+        assertEquals("https://www.selenium.dev/", driver.getCurrentUrl(), "Не совпадает");
     }
-    public void clickElement(List<WebElement> results, int num) {
-        results.get(num).click();
-        System.out.println("Нажал на первый элемент");
+
+    @Test
+    public void searchFieldTest() {
+        String input = "Selenium";
+        MainPage mp = new MainPage(driver);
+        mp.sendText(input);
+        WebDriverWait wait3 = new WebDriverWait(driver, Duration.ofSeconds(3));
+        wait3.until(ExpectedConditions.urlContains("bing.com"));
+        ResultsPage rp = new ResultsPage(driver);
+        rp.clickElement(0);
+        assertEquals(input, rp.getTextFromSearchField(), "Текст не совпал");
     }
+
 }

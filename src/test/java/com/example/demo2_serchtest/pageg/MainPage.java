@@ -20,7 +20,6 @@ public class MainPage {
         searchField.sendKeys(text);
         System.out.println("Введен текст " + text);
         searchField.submit();
-
     }
     public MainPage(WebDriver driver) {
         PageFactory.initElements(driver, this);

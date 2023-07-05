@@ -30,8 +30,6 @@ public class BingSearchTest {
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         driver.get("https://www.bing.com/");
-
-
     }
 
     @AfterEach
@@ -57,5 +55,4 @@ public class BingSearchTest {
         ResultsPage rp = new ResultsPage(driver);
         assertEquals(input, rp.getTextFromSearchField(), "Текст не совпал");
     }
-
 }

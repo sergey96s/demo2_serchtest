@@ -9,6 +9,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ResultsPage {
@@ -26,6 +27,8 @@ public class ResultsPage {
                 ExpectedConditions.elementToBeClickable(By.cssSelector("h2 > a[href]"))));
         results.get(num).click();
         System.out.println("Нажал на элемент под номером " + num);
+        ArrayList tabs = new ArrayList<> (driver.getWindowHandles());
+        driver.switchTo().window((String) tabs.get(1));
         WebDriverWait wait2 = new WebDriverWait(driver, Duration.ofSeconds(3));
         wait2.until(ExpectedConditions.not(ExpectedConditions.urlContains("bing.com")));
     }
@@ -35,6 +38,7 @@ public class ResultsPage {
         return val;
     }
     public ResultsPage(WebDriver driver) {
+        this.driver = driver;
         PageFactory.initElements(driver, this);
     }
 }
